@@ -8,7 +8,7 @@ const Authentication = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [credentials, setCredential] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
-  const baseURL="http://localhost8000/api"
+  const baseURL="http://localhost:8000/api"
 
   useEffect(() => {
     if (!credentials.email.includes("@")) {
