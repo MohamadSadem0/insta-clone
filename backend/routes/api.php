@@ -1,19 +1,28 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\SuggestionController;
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [UserController::class, 'login']);
+Route::post('/signup', [UserController::class, 'signup']);
 
-Route::middleware('auth:api')->group(function () {
-Route::get('/me', [AuthController::class, 'me']);
-Route::put('/user', [UserController::class, 'update']);
-Route::post('/post', [PostController::class, 'store']);
-Route::get('/posts', [PostController::class, 'index']);
-Route::post('/follow/{user}', [FollowController::class, 'follow']);
-Route::delete('/unfollow/{user}', [FollowController::class, 'unfollow']);
+Route::middleware('jwt.auth')->group(function () {
+    Route::post('/edit-profile', [UserController::class, 'editProfile']);
+
+    Route::post('/create-post', [PostController::class, 'create']);
+    Route::post('/like/{postId}', [LikeController::class, 'like']);
+    Route::post('/unlike/{postId}', [LikeController::class, 'unlike']);
+    Route::get('/feed', [PostController::class, 'feed']);
+
+    Route::post('/follow/{userId}', [FollowController::class, 'follow']);
+    Route::post('/unfollow/{userId}', [FollowController::class, 'unfollow']);
+    Route::get('/suggestions', [SuggestionController::class, 'suggestions']);
+
+    Route::post('/comment/{postId}', [CommentController::class, 'create']);
 });
