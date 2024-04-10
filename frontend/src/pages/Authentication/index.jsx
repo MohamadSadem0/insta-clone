@@ -1,31 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Login from "./components/LoginForm"
+import LoginForm from "./components/LoginForm";
+import SignupForm from "./components/SignupForm";
 
 const Authentication = () => {
-  const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(false);
-  const [credentials, setCredential] = useState({ email: "", password: "" });
+  const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState("");
-  const baseURL="http://localhost:8000/api"
 
-  useEffect(() => {
-    if (!credentials.email.includes("@")) {
-      setError("invalid email");
-    } else if (!credentials.password.length < 1) {
-      setError("inalid password");
-    } else {
-      setError("");
+  const toggleForm = () => {
+    setIsLogin(!isLogin);
+    setError("");
+  };
+
+  const handleAuth = async (credentials) => {
+    const endpoint = isLogin ? "/login" : "/signup";
+
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api${endpoint}`,
+        credentials
+      );
+      const { token, user } = response.data;
+
+      console.log("Authentication successful:", token, user);
+
+    } catch (error) {
+      setError("Something went wrong. Please try again.");
     }
-  }, [credentials]);
+  };
 
-  useEffect(()=>{},[])
-
-  return <div className="">
-    <Login></Login>
-  </div>;
+  return (
+    <div className="auth-container">
+      {isLogin ? (
+        <LoginForm
+          onSubmit={handleAuth}
+          toggleForm={toggleForm}
+          error={error}
+        />
+      ) : (
+        <SignupForm
+          onSubmit={handleAuth}
+          toggleForm={toggleForm}
+          error={error}
+        />
+      )}
+    </div>
+  );
 };
 
 export default Authentication;
