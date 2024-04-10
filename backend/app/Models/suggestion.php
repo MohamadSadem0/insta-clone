@@ -2,10 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class suggestion extends Model
+class Suggestion extends Model
 {
-    use HasFactory;
+    protected $fillable = ['user_id', 'suggestion_user_id'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function suggestionUser()
+    {
+        return $this->belongsTo(User::class, 'suggestion_user_id');
+    }
 }

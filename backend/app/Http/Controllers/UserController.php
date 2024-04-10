@@ -9,17 +9,19 @@ use Validator;
 
 class UserController extends Controller 
 {
-    public function __construct()
-{
-$this->middleware('auth:api', ['except' => ['login','register']]);
-}
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-        if ($token = JWTAuth::attempt($credentials)) {
-            return response()->json(['token' => $token], 200);
+
+        try {
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'Invalid credentials'], 401);
+            }
+        } catch (\JWTException $e) {
+            return response()->json(['error' => 'Failed to create token'], 500);
         }
-        return response()->json(['error' => 'Invalid credentials'], 401);
+
+        return response()->json(['token' => $token], 200);
     }
 
     public function signup(Request $request)
@@ -47,8 +49,12 @@ $this->middleware('auth:api', ['except' => ['login','register']]);
 
     public function editProfile(Request $request)
     {
-        $user = auth()->user();
-        $user->update($request->all());
-        return response()->json($user, 200);
+        try {
+            $user = auth()->user();
+            $user->update($request->all());
+            return response()->json($user, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update profile'], 500);
+        }
     }
 }

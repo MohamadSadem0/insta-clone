@@ -9,8 +9,9 @@ use App\Http\Controllers\FollowController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SuggestionController;
 
-Route::post('/login', [UserController::class, 'login']);
-Route::post('/signup', [UserController::class, 'signup']);
+Route::post('login', [UserController::class, 'login']);
+
+Route::post('signup', [UserController::class, 'signup']);
 
 Route::middleware('jwt.auth')->group(function () {
     Route::post('/edit-profile', [UserController::class, 'editProfile']);

@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Login from "./components/LoginForm"
 
 const Authentication = () => {
   const navigate = useNavigate();
@@ -22,7 +23,9 @@ const Authentication = () => {
 
   useEffect(()=>{},[])
 
-  return <div className="">hello from index</div>;
+  return <div className="">
+    <Login></Login>
+  </div>;
 };
 
 export default Authentication;

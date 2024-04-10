@@ -18,7 +18,7 @@ $validatedData = $request->validate([
 
 
 $user = User::create([
-'name' => $validatedData['name'],
+'username' => $validatedData['name'],
 'email' => $validatedData['email'],
 'password' => Hash::make($validatedData['password']),
 ]);

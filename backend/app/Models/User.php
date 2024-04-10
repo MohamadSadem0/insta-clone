@@ -4,37 +4,49 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-protected $fillable = [
-'name', 'email', 'password', 'bio', 'profile_picture',
-];
+    protected $fillable = ['username', 'email', 'password'];
 
-protected $hidden = [
-'password', 'remember_token',
-];
+    protected $hidden = ['password', 'remember_token'];
 
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 
-    use Notifiable;
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
 
-    // Rest omitted for brevity
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 
-    /**
-     * Get the identifier that will be stored in the subject claim of the JWT.
-     *
-     * @return mixed
-     */
+    public function follows()
+    {
+        return $this->hasMany(Follow::class, 'follower_id');
+    }
+
+    public function following()
+    {
+        return $this->hasMany(Follow::class, 'following_id');
+    }
+
+    public function suggestions()
+    {
+        return $this->hasMany(Suggestion::class);
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
     }
 
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
     public function getJWTCustomClaims()
     {
         return [];
