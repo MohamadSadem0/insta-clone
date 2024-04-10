@@ -70,7 +70,16 @@ return [
         //     'table' => 'users',
         // ],
     ],
-
+    'defaults' => [
+    'guard' => 'api',
+    'passwords' => 'users',
+],
+'guards' => [
+    'api' => [
+        'driver' => 'jwt',
+        'provider' => 'users',
+    ],
+],
     /*
     |--------------------------------------------------------------------------
     | Resetting Passwords
