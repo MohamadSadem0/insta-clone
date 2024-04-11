@@ -21,11 +21,10 @@ const Authentication = () => {
         credentials
       );
       const { token, user } = response.data;
-      console.log('====================================');
-      console.log(response);
-      console.log('====================================');
+      console.log(response.data.data);
 
-      // console.log("Authentication successful:", user);
+      console.log("Authentication successful:", token, user);
+        
 
     } catch (error) {
       setError("Something went wrong. Please try again.");
