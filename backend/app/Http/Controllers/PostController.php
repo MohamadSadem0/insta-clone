@@ -55,9 +55,14 @@ class PostController extends Controller
     }
 
     public function feed()
-    {
-        $followingIds = auth()->user()->follows()->pluck('following_id');
-        $posts = Post::whereIn('user_id', $followingIds)->latest()->get();
-        return response()->json($posts, 200);
-    }
+{
+    $followingIds = auth()->user()->follows()->pluck('following_id');
+
+    $followingIds[] = auth()->user()->id;
+
+    $posts = Post::whereIn('user_id', $followingIds)->latest()->get();
+
+    return response()->json($posts, 200);
+}
+
 }
