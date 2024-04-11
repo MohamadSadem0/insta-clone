@@ -10,19 +10,22 @@ use Validator;
 class UserController extends Controller 
 {
     public function login(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
+{
+    $credentials = $request->only('email', 'password');
 
-        try {
-            if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'Invalid credentials'], 401);
-            }
-        } catch (\JWTException $e) {
-            return response()->json(['error' => 'Failed to create token'], 500);
+    try {
+        if (!$token = JWTAuth::attempt($credentials)) {
+            return response()->json(['error' => 'Invalid credentials'], 401);
         }
 
-        return response()->json(['token' => $token], 200);
+        $user = User::where('email', $request->email)->first();
+
+        return response()->json(compact('user', 'token'), 200);
+    } catch (\JWTException $e) {
+        return response()->json(['error' => 'Failed to create token'], 500);
     }
+}
+
 
     public function signup(Request $request)
     {
